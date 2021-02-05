@@ -24,13 +24,15 @@ a_zone_id_list.each do |zone_id|
 end
 #puts zone_ids
 
-a_records_list = %x(aws-vault exec sandbox-power -- aws route53 list-resource-record-sets --hosted-zone-id Z16FONIR8CZGWM --query "ResourceRecordSets[?Type == 'A'].ResourceRecords[*].Value[]")
-puts a_records_list
+# this works when give one Zone iD, when i try to pass in array
+#a_records_list = %x(aws-vault exec sandbox-power -- aws route53 list-resource-record-sets --hosted-zone-id Z16FONIR8CZGWM --query "ResourceRecordSets[?Type == 'A'].ResourceRecords[*].Value[]")
+#puts a_records_list
 
-
-#zone_ids.each do |zone_id|
-#  %x(aws-vault exec sandbox-terraform -- aws route53 list-resource-record-sets --hosted-zone-id Z16FONIR8CZGWM --query "ResourceRecordSets[?Type == 'A'].ResourceRecords[*].Value[]")
-#end
+a_records =[]
+zone_ids.each do |zone_id|
+  a_records << %x(aws-vault exec sandbox-power -- aws route53 list-resource-record-sets --hosted-zone-id Z16FONIR8CZGWM --query "ResourceRecordSets[?Type == 'A'].ResourceRecords[*].Value[]")
+end
+puts a_records
 
 #For each public DNS zone, using the hosted zone ID, find all "A" records
 # Step 1-  Loop through the "a_zone_id_list" array and pull out the Zone IDs
